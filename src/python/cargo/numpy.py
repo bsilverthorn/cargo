@@ -89,3 +89,11 @@ def numpy_printing(**kwargs):
 
     numpy.set_printoptions(**old)
 
+@contextlib.contextmanager
+def numpy_errors(**kwargs):
+    old = numpy.seterr(**kwargs)
+
+    yield
+
+    numpy.seterr(**old)
+

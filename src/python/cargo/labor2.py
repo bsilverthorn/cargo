@@ -10,7 +10,6 @@ import socket
 import signal
 import random
 import traceback
-import subprocess
 import collections
 import multiprocessing
 import cPickle as pickle

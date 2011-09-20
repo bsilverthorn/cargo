@@ -22,14 +22,11 @@ import bz2
 import csv
 import pwd
 import gzip
-import errno
 import shutil
 import hashlib
 import tempfile
-import threading
-import mimetypes
-import contextlib
 import subprocess
+import contextlib
 import collections
 import cargo
 
@@ -43,16 +40,8 @@ from uuid         import (
     uuid4,
     uuid5,
     )
-from shutil       import (
-    copy2,
-    )
-from tempfile     import (
-    gettempdir,
-    )
-from subprocess   import (
-    Popen,
-    check_call,
-    )
+from shutil       import copy2
+from tempfile     import gettempdir
 from cargo.errors import Raised
 
 def write_named_csv(file_, tuples):
@@ -256,12 +245,10 @@ def openz(path, mode = "rb", closing = True):
     elif extension == ".xz":
         raise NotImplementedError()
     else:
-        file_ = open(path, mode)
+        return open(path, mode)
 
     if closing:
         return contextlib.closing(file_)
-    else:
-        return file_
 
 def xzed(bytes):
     """
@@ -288,11 +275,11 @@ def decompress(ipath, opath, encoding = None):
 
     with open(opath, "w") as ofile:
         if extension == ".bz2":
-            check_call(["bunzip2", "-c", ipath], stdout = ofile)
+            subprocess.check_call(["bunzip2", "-c", ipath], stdout = ofile)
         elif extension == ".gz":
-            check_call(["gunzip", "-c", ipath], stdout = ofile)
+            subprocess.check_call(["gunzip", "-c", ipath], stdout = ofile)
         elif extension == ".xz":
-            check_call(["unxz", "-c", ipath], stdout = ofile)
+            subprocess.check_call(["unxz", "-c", ipath], stdout = ofile)
         else:
             raise RuntimeError("uncompressed, or unsupported compression encoding")
 

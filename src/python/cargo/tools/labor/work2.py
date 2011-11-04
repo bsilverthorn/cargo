@@ -34,12 +34,7 @@ def work_once(condor_id, req_socket, task):
 
     # complete the assignment
     try:
-        seed = abs(hash(task.key))
-
-        logger.info("setting PRNG seed to %s", seed)
-
-        numpy.random.seed(seed)
-        random.seed(numpy.random.randint(2**32))
+        cargo.labor2._current_task = task
 
         logger.info("starting work on task %s", task.key)
 
@@ -73,6 +68,8 @@ def work_once(condor_id, req_socket, task):
             )
 
         return cargo.recv_pyobj_gz(req_socket)
+
+    cargo.labor2._current_task = None
 
     return None
 

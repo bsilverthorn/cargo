@@ -18,6 +18,13 @@ import cargo
 
 logger = cargo.get_logger(__name__, level = "INFO")
 
+_current_task = None
+
+def get_task():
+    """Get the currently-executing task, if any."""
+
+    return _current_task
+
 def send_pyobj_gz(zmq_socket, message):
     pickled = pickle.dumps(message)
     compressed = zlib.compress(pickled, 1)
